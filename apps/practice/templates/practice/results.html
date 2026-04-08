@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Results 
+{% endblock %} {% block content %}
+
+<h1>Session Complete!</h1>
+<p>Duration: {{ duration }} minute{{ duration|pluralize }}</p>
+<p>Score: {{ correct }} / {{ total }} correct</p>
+<p>Accuracy: {{ percentage }}%</p>
+<a class="btn btn-primary" href="/">Practice Again</a>
+
+{% endblock %}

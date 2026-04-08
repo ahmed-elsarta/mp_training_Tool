@@ -1,0 +1,69 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Practice — {{
+minimal_pair }}{% endblock %} {% block content %}
+
+<div id="duration-screen">
+  <h1>Practice: {{ minimal_pair.sound_1 }} / {{ minimal_pair.sound_2 }}</h1>
+  <h2>How long do you want to practice?</h2>
+  <div id="duration-buttons">
+    {% for d in durations %}
+    <button class="btn btn-primary" onclick="startSession({{ d.seconds }})">
+      {{ d.label }}
+    </button>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="practice-screen" style="display: none">
+  <div id="timer-display"><span id="timer">--:--</span></div>
+  <div id="score-display">
+    Score: <span id="correct-count">0</span> / <span id="total-count">0</span>
+  </div>
+  <div id="word-display">
+    <p>Listen and choose the word you heard.</p>
+  </div>
+  <div id="replay-section" style="display: none">
+    <button id="replay-btn" onclick="replayAudio()">🔁 Replay (1 left)</button>
+  </div>
+  <div id="choices">
+    <button
+      id="btn-left"
+      class="choice-btn"
+      onclick="answer('left')"
+      accesskey="f"
+    >
+      <span class="key-hint">[F]</span>
+      <span id="label-left"></span>
+    </button>
+    <button
+      id="btn-right"
+      class="choice-btn"
+      onclick="answer('right')"
+      accesskey="j"
+    >
+      <span class="key-hint">[J]</span>
+      <span id="label-right"></span>
+    </button>
+  </div>
+  <div id="feedback" style="display: none">
+    <p id="feedback-text"></p>
+  </div>
+  <button class="btn" onclick="endSession()" style="margin-top: 2rem">
+    End Session
+  </button>
+</div>
+
+<div id="done-screen" style="display: none">
+  <h1>Session Complete!</h1>
+  <p>Saving your score...</p>
+</div>
+
+<script>
+  const MINIMAL_PAIR_ID = {{ minimal_pair.id }};
+  const SOUND_1         = "{{ minimal_pair.sound_1 }}";
+  const SOUND_2         = "{{ minimal_pair.sound_2 }}";
+  const PAIRS           = {{ pairs|safe }};
+  const MEDIA_URL       = "{{ MEDIA_URL }}";
+</script>
+<script src="{% static 'js/practice.js' %}"></script>
+
+{% endblock %}

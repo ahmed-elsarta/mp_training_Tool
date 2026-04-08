@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% block title %}Minimal Pairs Trainer{% endblock %}
+{% block content %}
+
+<h1>Choose a Language</h1>
+<ul>
+  {% for language in languages %}
+  <li>
+    <button
+      class="btn btn-primary"
+      onclick="selectLanguage({{ language.id }}, '{{ language.name }}')"
+    >
+      {{ language.name }}
+    </button>
+  </li>
+  {% empty %}
+  <li>No languages available yet.</li>
+  {% endfor %}
+</ul>
+
+<div id="minimal-pairs-section" style="display: none">
+  <h2>Minimal Pairs for <span id="language-name"></span></h2>
+  <ul id="minimal-pairs-list"></ul>
+</div>
+
+<script>
+  function selectLanguage(languageId, languageName) {
+    document.getElementById("language-name").textContent = languageName;
+    fetch(`/language/${languageId}/pairs/`)
+      .then((response) => response.json())
+      .then((data) => {
+        const list = document.getElementById("minimal-pairs-list");
+        list.innerHTML = "";
+        data.minimal_pairs.forEach((pair) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+                            <span>${pair.sound_1} / ${pair.sound_2}</span>
+                            <a class="btn btn-primary" href="/practice/${pair.id}/">Practice</a>
+                        `;
+          list.appendChild(li);
+        });
+        document.getElementById("minimal-pairs-section").style.display =
+          "block";
+      });
+  }
+</script>
+
+{% endblock %}

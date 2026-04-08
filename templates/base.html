@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Minimal Pairs Trainer{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="nav-brand" href="/">Minimal Pairs Trainer</a>
+      <div class="nav-links">
+        {% if request.user.is_authenticated %}
+        <a href="/accounts/profile/">{{ request.user.username }}</a>
+        <a href="/accounts/logout/">Logout</a>
+        {% else %}
+        <a href="/accounts/login/">Login</a>
+        <a href="/accounts/register/">Register</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <main class="container">{% block content %} {% endblock %}</main>
+  </body>
+</html>
