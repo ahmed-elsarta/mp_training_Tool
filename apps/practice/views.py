@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 import json
-
 from apps.content.models import MinimalPair, Word
 from .models import Score
 
@@ -11,21 +10,27 @@ from .models import Score
 def session(request, mp_id):
     minimal_pair = get_object_or_404(MinimalPair, id=mp_id)
 
-    # Only fetch words that have a partner assigned
     words = Word.objects.filter(
         minimal_pair=minimal_pair,
         partner__isnull=False,
         sound=minimal_pair.sound_1
-    ).select_related('partner').values(
-        'id', 'text', 'sound', 'audio_file',
-        'partner__id', 'partner__text', 'partner__sound', 'partner__audio_file'
-    )
+    ).select_related('partner')
 
     pairs = []
     for w in words:
         pairs.append({
-            'word':     {'id': w['id'],            'text': w['text'],            'sound': w['sound'],            'audio_file': w['audio_file']},
-            'partner':  {'id': w['partner__id'],   'text': w['partner__text'],   'sound': w['partner__sound'],   'audio_file': w['partner__audio_file']},
+            'word': {
+                'id': w.id,
+                'text': w.text,
+                'sound': w.sound,
+                'audio_url': w.audio_file.url,
+            },
+            'partner': {
+                'id': w.partner.id,
+                'text': w.partner.text,
+                'sound': w.partner.sound,
+                'audio_url': w.partner.audio_file.url,
+            },
         })
 
     context = {
