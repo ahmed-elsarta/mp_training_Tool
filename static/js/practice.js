@@ -82,8 +82,8 @@ function nextQuestion() {
   }
 
   // Play audio
-  // const audioUrl = MEDIA_URL + "audio/" + playWord.audio_file.split("/").pop();
-  const audioUrl = playWord.audio_url;
+  const audioUrl = MEDIA_URL + "audio/" + playWord.audio_file.split("/").pop();
+  // const audioUrl = playWord.audio_url;
   currentAudio = new Audio(audioUrl);
   currentAudio.play();
 

@@ -23,13 +23,13 @@ def session(request, mp_id):
                 'id': w.id,
                 'text': w.text,
                 'sound': w.sound,
-                'audio_url': w.audio_file.url,
+                'audio_file': w.audio_file.name,
             },
             'partner': {
                 'id': w.partner.id,
                 'text': w.partner.text,
                 'sound': w.partner.sound,
-                'audio_url': w.partner.audio_file.url,
+                'audio_file': w.partner.audio_file.name,
             },
         })
 

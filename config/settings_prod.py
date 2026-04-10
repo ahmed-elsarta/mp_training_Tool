@@ -1,6 +1,6 @@
 from .settings import *
 import os
-import cloudinary
+# import cloudinary
 
 DEBUG = False
 ALLOWED_HOSTS = [os.getenv('PYTHONANYWHERE_HOST')]
@@ -8,22 +8,27 @@ ALLOWED_HOSTS = [os.getenv('PYTHONANYWHERE_HOST')]
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# ─── Media files via Cloudinary ───────────────────────
-INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY':    os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-    'DEFAULT_FILE_STORAGE': 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
-}
 
-cloudinary.config(
-    cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key    = os.getenv('CLOUDINARY_API_KEY'),
-    api_secret = os.getenv('CLOUDINARY_API_SECRET'),
-    secure     = True
-)
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+# # ─── Media files via Cloudinary ───────────────────────
+# INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+#     'API_KEY':    os.getenv('CLOUDINARY_API_KEY'),
+#     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+#     'DEFAULT_FILE_STORAGE': 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+# }
+
+# cloudinary.config(
+#     cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
+#     api_key    = os.getenv('CLOUDINARY_API_KEY'),
+#     api_secret = os.getenv('CLOUDINARY_API_SECRET'),
+#     secure     = True
+# )
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+# Fuck it, local storage, these files are all less than 1MB anyways
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # ─── Database — Clever Cloud MySQL ────────────────────
 DATABASES = {
     'default': {
@@ -31,6 +36,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 # ─── Security ─────────────────────────────────────────
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
