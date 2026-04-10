@@ -148,3 +148,12 @@ td {
 tr:last-child td {
   border-bottom: none;
 }
+
+/* footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: #2c3e50;
+  color: #ecf0f1;
+  margin-top: 2rem;
+}

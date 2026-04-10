@@ -24,12 +24,8 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # ─── Database — Clever Cloud MySQL ────────────────────
 DATABASES = {
     'default': {
-        'ENGINE':   'django.db.backends.mysql',
-        'NAME':     os.getenv('PROD_DB_NAME'),
-        'USER':     os.getenv('PROD_DB_USER'),
-        'PASSWORD': os.getenv('PROD_DB_PASSWORD'),
-        'HOST':     os.getenv('PROD_DB_HOST'),
-        'PORT':     os.getenv('PROD_DB_PORT', '3306'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
