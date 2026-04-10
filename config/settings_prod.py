@@ -1,5 +1,7 @@
 from .settings import *
 import os
+import cloudinary
+
 DEBUG = False
 ALLOWED_HOSTS = [os.getenv('PYTHONANYWHERE_HOST')]
 # ─── Static files via Whitenoise ──────────────────────
@@ -14,6 +16,13 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
     'DEFAULT_FILE_STORAGE': 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
 }
+
+cloudinary.config(
+    cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key    = os.getenv('CLOUDINARY_API_KEY'),
+    api_secret = os.getenv('CLOUDINARY_API_SECRET'),
+    secure     = True
+)
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
 # ─── Database — Clever Cloud MySQL ────────────────────
 DATABASES = {
