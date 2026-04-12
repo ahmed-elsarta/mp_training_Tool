@@ -10,32 +10,42 @@ from .models import Score
 def session(request, mp_id):
     minimal_pair = get_object_or_404(MinimalPair, id=mp_id)
 
+    # Fetch all paired words regardless of sound field
     words = Word.objects.filter(
         minimal_pair=minimal_pair,
         partner__isnull=False,
         sound=minimal_pair.sound_1
     ).select_related('partner')
 
-    pairs = []
-    for w in words:
-        pairs.append({
-            'word': {
-                'id': w.id,
-                'text': w.text,
-                'sound': w.sound,
-                'audio_file': w.audio_file.name,
-            },
-            'partner': {
-                'id': w.partner.id,
-                'text': w.partner.text,
-                'sound': w.partner.sound,
-                'audio_file': w.partner.audio_file.name,
-            },
-        })
+    # If that returns empty, fetch all paired words without sound filter
+    if not words.exists():
+        seen = set()
+        pairs = []
+        all_words = Word.objects.filter(
+            minimal_pair=minimal_pair,
+            partner__isnull=False
+        ).select_related('partner')
+
+        for w in all_words:
+            if w.id in seen or w.partner.id in seen:
+                continue
+            seen.add(w.id)
+            seen.add(w.partner.id)
+            pairs.append({
+                'word':    {'id': w.id,           'text': w.text,           'sound': w.sound,           'audio_file': w.audio_file.name},
+                'partner': {'id': w.partner.id,   'text': w.partner.text,   'sound': w.partner.sound,   'audio_file': w.partner.audio_file.name},
+            })
+    else:
+        pairs = []
+        for w in words:
+            pairs.append({
+                'word':    {'id': w.id,           'text': w.text,           'sound': w.sound,           'audio_file': w.audio_file.name},
+                'partner': {'id': w.partner.id,   'text': w.partner.text,   'sound': w.partner.sound,   'audio_file': w.partner.audio_file.name},
+            })
 
     context = {
         'minimal_pair': minimal_pair,
-        'pairs':        json.dumps(pairs),
+        'pairs':        json.dumps(pairs, ensure_ascii=False),
         'durations': [
             {'label': '1 minute',   'seconds': 60},
             {'label': '5 minutes',  'seconds': 300},
